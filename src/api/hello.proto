@@ -3,7 +3,11 @@ syntax = "proto3";
 
 // proto bufferをパッケージ化する
 // 他のproto bufferを参照できるようになる
-package myapp;
+package hello;
+
+
+// generateされたgoファイルを配置する箇所
+option go_package = "pkg/grpc";
 
 
 // サードパーティの型をimportすることもできる
