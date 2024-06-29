@@ -1,0 +1,33 @@
+// proto bufferのバージョンを指定
+syntax = "proto3";
+
+// proto bufferをパッケージ化する
+// 他のproto bufferを参照できるようになる
+package myapp;
+
+
+// サードパーティの型をimportすることもできる
+import "google/protobuf/timestamp.proto";
+
+// サービス　メソッドをまとめたもの
+service GreetingService {
+  // メソッド（grpcで呼び出され関数（Procedure）
+  // HelloRequest・HelloResponseは型
+  rpc Hello(HelloRequest) returns (HelloResponse);
+}
+
+// 型情報
+message HelloRequest {
+  // string型のnameフィールド
+  // 1はフィールド番号でユニークである必要がある
+  string name = 1;
+
+  // googleが作成している型を引用することもできる
+  google.protobuf.Timestamp create_time = 2;
+}
+
+// 型情報
+message HelloResponse {
+  // string型のmessageフィールド
+  string message = 1;
+}
