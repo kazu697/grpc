@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"context"
+	"errors"
 	"fmt"
+	"io"
 	"log"
 	"os"
 
@@ -47,7 +49,8 @@ func main() {
 
 	for {
 		fmt.Println("1: send Request")
-		fmt.Println("2: exit")
+		fmt.Println("2: Hello ServerStream")
+		fmt.Println("3: exit")
 		fmt.Println("please enter >")
 
 		scanner.Scan()
@@ -57,6 +60,8 @@ func main() {
 		case "1":
 			Hello()
 		case "2":
+			HelloSererStream()
+		case "3":
 			fmt.Println("bye .")
 			goto M
 		}
@@ -80,4 +85,38 @@ func Hello() {
 		fmt.Println(res.GetMessage())
 	}
 
+}
+
+func HelloSererStream() {
+	fmt.Println("Please enter your name.")
+	scanner.Scan()
+	name := scanner.Text()
+
+	req := &hellopb.HelloRequest{
+		Name: name,
+	}
+
+	// streamを取得する
+	stream, err := client.HelloServerStream(context.Background(), req)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for {
+		// streamからレスポンスを取得する
+		// レスポンスがあるまで処理が待たれる
+		res, err := stream.Recv()
+
+		// サーバーから終端コードが送られたら処理を終了する
+		if errors.Is(err, io.EOF) {
+			fmt.Println("all the responses have alredy recieved.")
+			break
+		}
+
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(res)
+	}
 }
