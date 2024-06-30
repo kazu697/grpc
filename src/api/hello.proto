@@ -18,6 +18,9 @@ service GreetingService {
   // メソッド（grpcで呼び出され関数（Procedure）
   // HelloRequest・HelloResponseは型
   rpc Hello(HelloRequest) returns (HelloResponse);
+
+  // サーバーストリーミングRPC
+  rpc HelloServerStream(HelloRequest) returns (stream HelloResponse);
 }
 
 // 型情報
